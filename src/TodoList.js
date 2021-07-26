@@ -10,6 +10,7 @@ class TodoList extends Component {
         this.addTodo = this.addTodo.bind(this);
         this.remove = this.remove.bind(this);
         this.update = this.update.bind(this);
+        this.toggleCompletion = this.toggleCompletion.bind(this);
     }
 
     addTodo(newTodo) {
@@ -34,13 +35,34 @@ class TodoList extends Component {
         this.setState({ TodoItems: updatedTodos })
     }
 
+    toggleCompletion(id){
+        const updatedTodos = this.state.TodoItems.map(todo => {
+            if(todo.id === id){
+                return {...todo, completed: !todo.completed}
+            }
+            return todo;
+        })
+        this.setState({ TodoItems: updatedTodos })
+    }
+
     render() {
         let todos = this.state.TodoItems.map(todo => {
-            return <Todo key={todo.id} id={todo.id} task={todo.task} removeTodo={this.remove} updateTodo={this.update}/>
-        })
+            return (
+            <Todo 
+                key={todo.id} 
+                id={todo.id} 
+                task={todo.task} 
+                removeTodo={this.remove} 
+                updateTodo={this.update}
+                completed={todo.completed}
+                toggleTodo={this.toggleCompletion}
+            />
+            );
+        });
         return (
-            <div>
-                <div className="singleTodo">{todos}</div>
+            <div className="TodoList">
+                <h1>Todo List! <span>A Simple React Todo List App.</span></h1>
+                <ul className="singleTodo">{todos}</ul>
                 <NewTodoItem addItem={this.addTodo}/>
             </div>
         )

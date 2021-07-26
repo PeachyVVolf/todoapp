@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './Todo.css'
 
 class Todo extends Component {
 
@@ -12,6 +13,7 @@ class Todo extends Component {
         this.handleEdit = this.handleEdit.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleToggle = this.handleToggle.bind(this);
     }
 
     handleRemove(evt){
@@ -28,8 +30,7 @@ class Todo extends Component {
         evt.preventDefault();
         this.props.updateTodo(this.props.id, this.state.task)
         this.setState({
-            isEditing: false,
-            task: this.props.task
+            isEditing: false
         })
     }
 
@@ -39,12 +40,16 @@ class Todo extends Component {
         })
     }
 
+    handleToggle(evt){
+        this.props.toggleTodo(this.props.id);
+    }
+
     render() {
         let result;
         if(this.state.isEditing){
             result = (
-                <div>
-                    <form onSubmit={this.handleUpdate}>
+                <div className="Todo">
+                    <form className="Todo-edit-form" onSubmit={this.handleUpdate}>
                         <input type="text" value={this.state.task} name="task" onChange={this.handleChange}/>
                         <button>Save</button>
                     </form>
@@ -53,10 +58,12 @@ class Todo extends Component {
         }
         else{
             result = (
-                <div>
-                    <li>{this.props.task}</li>
-                    <button onClick={this.handleEdit}>Edit</button>
-                    <button onClick={this.handleRemove}>Delete</button>
+                <div className="Todo">
+                    <li className={this.props.completed ? "Todo-task completed": "Todo-task"} onClick={this.handleToggle}>{this.props.task}</li>
+                    <div className="Todo-buttons">
+                        <button onClick={this.handleEdit}><i className='fa fa-pencil' /></button>
+                        <button onClick={this.handleRemove}><i className='fa fa-trash' /></button>
+                    </div>
                 </div>
             )
         }
